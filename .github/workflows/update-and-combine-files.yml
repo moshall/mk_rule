@@ -36,6 +36,4 @@ jobs:
           git config --global user.email 'github-actions@github.com'
           git add Netflix.list OpenAI.list Claude.list AI_Combined.list YouTube.list
           git commit -m "Update and combine files from remote repositories"
-          git push
-        env:
-          GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+          git push https://github-actions:${{ secrets.PERSONAL_ACCESS_TOKEN }}@github.com/moshall/mk_rule.git
