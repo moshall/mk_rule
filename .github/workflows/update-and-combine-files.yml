@@ -31,6 +31,8 @@ jobs:
 
       # 提交并推送合并后的文件
       - name: Commit and Push Combined Files
+        env:
+          PERSONAL_ACCESS_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
         run: |
           git config --global user.name 'github-actions'
           git config --global user.email 'github-actions@github.com'
