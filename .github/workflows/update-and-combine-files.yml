@@ -17,7 +17,7 @@ jobs:
         run: curl -o Netflix.list https://raw.githubusercontent.com/moshall/ios_rule_script/master/rule/QuantumultX/Netflix/Netflix.list
 
       # 下载文件BardAI、OpenAI、Claude 并合并
-      - name: Download and Combine BardAI.list and OpenAI.list and Claude.list
+      - name: Download and Combine BardAI.list, OpenAI.list, and Claude.list
         run: |
           curl -o BardAI.list https://raw.githubusercontent.com/moshall/ios_rule_script/master/rule/QuantumultX/BardAI/BardAI.list
           curl -o OpenAI.list https://raw.githubusercontent.com/moshall/ios_rule_script/master/rule/QuantumultX/OpenAI/OpenAI.list
@@ -28,7 +28,6 @@ jobs:
       - name: Download YouTube.list
         run: curl -o YouTube.list https://raw.githubusercontent.com/moshall/ios_rule_script/master/rule/QuantumultX/YouTube/YouTube.list
 
-
       # 提交并推送合并后的文件
       - name: Commit and Push Combined Files
         env:
@@ -36,6 +35,7 @@ jobs:
         run: |
           git config --global user.name 'github-actions'
           git config --global user.email 'github-actions@github.com'
-          git add Netflix.list OpenAI.list Claude.list AI_Combined.list YouTube.list
+          git add Netflix.list BardAI.list OpenAI.list Claude.list AI_Combined.list YouTube.list
           git commit -m "Update and combine files from remote repositories"
-          git push https://github-actions:${{ secrets.PERSONAL_ACCESS_TOKEN }}@github.com/moshall/mk_rule.git
+          git remote set-url origin https://github-actions:${{ secrets.PERSONAL_ACCESS_TOKEN }}@github.com/moshall/mk_rule.git
+          git push origin HEAD:main
