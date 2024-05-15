@@ -1,0 +1,41 @@
+name: Update and Combine Rule Files from Remote Repos blackmatrix7
+
+on:
+  schedule:
+    - cron: '0 4 * * *'  # 每天凌晨4点检查一次更新
+  workflow_dispatch:  # 手动触发
+
+jobs:
+  update-and-combine-files:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      # 下载文件Netflix (直接引用)
+      - name: Download Netflix.list
+        run: curl -o Netflix.list https://raw.githubusercontent.com/moshall/ios_rule_script/master/rule/QuantumultX/Netflix/Netflix.list
+
+      # 下载文件BardAI、OpenAI、Claude 并合并
+      - name: Download and Combine BardAI.list and OpenAI.list and Claude.list
+        run: |
+          curl -o BardAI.list https://raw.githubusercontent.com/moshall/ios_rule_script/master/rule/QuantumultX/BardAI/BardAI.list
+          curl -o OpenAI.list https://raw.githubusercontent.com/moshall/ios_rule_script/master/rule/QuantumultX/OpenAI/OpenAI.list
+          curl -o Claude.list https://raw.githubusercontent.com/moshall/ios_rule_script/master/rule/QuantumultX/Claude/Claude.list
+          cat BardAI.list OpenAI.list Claude.list > AI_Combined.list
+
+      # 下载文件YouTube.list (直接引用)
+      - name: Download YouTube.list
+        run: curl -o YouTube.list https://raw.githubusercontent.com/moshall/ios_rule_script/master/rule/QuantumultX/YouTube/YouTube.list
+
+
+      # 提交并推送合并后的文件
+      - name: Commit and Push Combined Files
+        run: |
+          git config --global user.name 'github-actions'
+          git config --global user.email 'github-actions@github.com'
+          git add Netflix.list OpenAI.list Claude.list AI_Combined.list YouTube.list
+          git commit -m "Update and combine files from remote repositories"
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
