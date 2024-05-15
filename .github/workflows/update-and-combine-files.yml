@@ -11,6 +11,8 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
 
       # 下载文件Netflix (直接引用)
       - name: Download Netflix.list
@@ -31,11 +33,11 @@ jobs:
       # 提交并推送合并后的文件
       - name: Commit and Push Combined Files
         env:
-          PERSONAL_ACCESS_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
         run: |
           git config --global user.name 'github-actions'
           git config --global user.email 'github-actions@github.com'
           git add Netflix.list BardAI.list OpenAI.list Claude.list AI_Combined.list YouTube.list
           git commit -m "Update and combine files from remote repositories"
-          git remote set-url origin https://github-actions:${{ secrets.PERSONAL_ACCESS_TOKEN }}@github.com/moshall/mk_rule.git
+          git remote set-url origin https://x-access-token:${{ secrets.PERSONAL_ACCESS_TOKEN }}@github.com/moshall/mk_rule.git
           git push origin HEAD:main
