@@ -26,6 +26,12 @@ jobs:
           curl -o Claude.list https://raw.githubusercontent.com/moshall/ios_rule_script/master/rule/QuantumultX/Claude/Claude.list
           cat BardAI.list OpenAI.list Claude.list > AI_Combined.list
 
+
+      # 下载文件XPTV.list (直接引用)
+      - name: Download XPTV.list
+        run: curl -o XPTV.list https://raw.githubusercontent.com/fangkuia/XPTV/main/X/QuantumultX.list
+
+
       # 下载文件YouTube.list (直接引用)
       - name: Download YouTube.list
         run: curl -o YouTube.list https://raw.githubusercontent.com/moshall/ios_rule_script/master/rule/QuantumultX/YouTube/YouTube.list
@@ -37,7 +43,7 @@ jobs:
         run: |
           git config --global user.name 'github-actions'
           git config --global user.email 'github-actions@github.com'
-          git add Netflix.list BardAI.list OpenAI.list Claude.list AI_Combined.list YouTube.list
+          git add Netflix.list AI_Combined.list YouTube.list XPTV.list
           git commit -m "Update and combine files from remote repositories"
           git remote set-url origin https://x-access-token:${{ secrets.PERSONAL_ACCESS_TOKEN }}@github.com/moshall/mk_rule.git
           git push origin HEAD:main
