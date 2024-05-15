@@ -14,27 +14,32 @@ jobs:
         with:
           token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
 
+      # 创建 QuantumultX 目录并切换到该目录
+      - name: Create QuantumultX Directory
+        run: mkdir -p QuantumultX && cd QuantumultX
+
+
       # 下载文件Netflix (直接引用)
       - name: Download Netflix.list
-        run: curl -o Netflix.list https://raw.githubusercontent.com/moshall/ios_rule_script/master/rule/QuantumultX/Netflix/Netflix.list
+        run: curl -o QuantumultX/Netflix.list https://raw.githubusercontent.com/moshall/ios_rule_script/master/rule/QuantumultX/Netflix/Netflix.list
 
       # 下载文件BardAI、OpenAI、Claude 并合并
       - name: Download and Combine BardAI.list, OpenAI.list, and Claude.list
         run: |
-          curl -o BardAI.list https://raw.githubusercontent.com/moshall/ios_rule_script/master/rule/QuantumultX/BardAI/BardAI.list
-          curl -o OpenAI.list https://raw.githubusercontent.com/moshall/ios_rule_script/master/rule/QuantumultX/OpenAI/OpenAI.list
-          curl -o Claude.list https://raw.githubusercontent.com/moshall/ios_rule_script/master/rule/QuantumultX/Claude/Claude.list
-          cat BardAI.list OpenAI.list Claude.list > AI_Combined.list
+          curl -o QuantumultX/BardAI.list https://raw.githubusercontent.com/moshall/ios_rule_script/master/rule/QuantumultX/BardAI/BardAI.list
+          curl -o QuantumultX/OpenAI.list https://raw.githubusercontent.com/moshall/ios_rule_script/master/rule/QuantumultX/OpenAI/OpenAI.list
+          curl -o QuantumultX/Claude.list https://raw.githubusercontent.com/moshall/ios_rule_script/master/rule/QuantumultX/Claude/Claude.list
+          cat QuantumultX/BardAI.list QuantumultX/OpenAI.list QuantumultX/Claude.list > QuantumultX/AI_Combined.list
 
 
       # 下载文件XPTV.list (直接引用)
       - name: Download XPTV.list
-        run: curl -o XPTV.list https://raw.githubusercontent.com/fangkuia/XPTV/main/X/QuantumultX.list
+        run: curl -o QuantumultX/XPTV.list https://raw.githubusercontent.com/fangkuia/XPTV/main/X/QuantumultX.list
 
 
       # 下载文件YouTube.list (直接引用)
       - name: Download YouTube.list
-        run: curl -o YouTube.list https://raw.githubusercontent.com/moshall/ios_rule_script/master/rule/QuantumultX/YouTube/YouTube.list
+        run: curl -o QuantumultX/YouTube.list https://raw.githubusercontent.com/moshall/ios_rule_script/master/rule/QuantumultX/YouTube/YouTube.list
 
       # 提交并推送合并后的文件
       - name: Commit and Push Combined Files
@@ -43,7 +48,7 @@ jobs:
         run: |
           git config --global user.name 'github-actions'
           git config --global user.email 'github-actions@github.com'
-          git add Netflix.list AI_Combined.list YouTube.list XPTV.list
+          git add QuantumultX/Netflix.list QuantumultX/AI_Combined.list QuantumultX/YouTube.list QuantumultX/XPTV.list
           git commit -m "Update and combine files from remote repositories"
           git remote set-url origin https://x-access-token:${{ secrets.PERSONAL_ACCESS_TOKEN }}@github.com/moshall/mk_rule.git
           git push origin HEAD:main
