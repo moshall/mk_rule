@@ -16,7 +16,7 @@ jobs:
 
       # 创建 QuantumultX 目录并切换到该目录
       - name: Create QuantumultX Directory
-        run: mkdir -p QuantumultX && cd QuantumultX
+        run: mkdir -p QuantumultX 
 
 
       # 下载文件Netflix (直接引用)
@@ -50,6 +50,6 @@ jobs:
           git config --global user.name 'github-actions'
           git config --global user.email 'github-actions@github.com'
           git add QuantumultX/Netflix.list QuantumultX/AI_Combined.list QuantumultX/YouTube.list QuantumultX/XPTV.list
-          git commit -m "Update and combine files from remote repositories"
+          git diff-index --quiet HEAD || git commit -m "Update and combine files from remote repositories"
           git remote set-url origin https://x-access-token:${{ secrets.PERSONAL_ACCESS_TOKEN }}@github.com/moshall/mk_rule.git
           git push origin HEAD:main
