@@ -30,6 +30,7 @@ jobs:
           curl -o QuantumultX/OpenAI.list https://raw.githubusercontent.com/moshall/ios_rule_script/master/rule/QuantumultX/OpenAI/OpenAI.list
           curl -o QuantumultX/Claude.list https://raw.githubusercontent.com/moshall/ios_rule_script/master/rule/QuantumultX/Claude/Claude.list
           cat QuantumultX/BardAI.list QuantumultX/OpenAI.list QuantumultX/Claude.list > QuantumultX/AI_Combined.list
+          rm QuantumultX/BardAI.list QuantumultX/OpenAI.list QuantumultX/Claude.list  # 删除不需要的文件
 
 
       # 下载文件XPTV.list (直接引用)
