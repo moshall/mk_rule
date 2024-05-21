@@ -1,4 +1,4 @@
-name: Update and Combine Rule Files from Remote Repos blackmatrix7
+name: Shadowrocket Update and Combine Rule Files from Remote Repos blackmatrix7
 
 on:
   schedule:
