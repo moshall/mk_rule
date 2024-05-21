@@ -1,0 +1,55 @@
+name: Update and Combine Rule Files from Remote Repos blackmatrix7
+
+on:
+  schedule:
+    - cron: '0 3 * * *'  # 每天凌晨3点检查一次更新
+  workflow_dispatch:  # 手动触发
+
+jobs:
+  update-and-combine-files:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+
+      # 创建 QuantumultX 目录并切换到该目录
+      - name: Create Shadowrocket Directory
+        run: mkdir -p Shadowrocket 
+
+
+      # 下载文件Netflix (直接引用)
+      - name: Download Netflix.list
+        run: curl -o Shadowrocket/Netflix.list https://raw.githubusercontent.com/moshall/ios_rule_script/master/rule/Shadowrocket/Netflix/Netflix.list
+
+      # 下载文件BardAI、OpenAI、Claude 并合并
+      - name: Download and Combine BardAI.list, OpenAI.list, and Claude.list
+        run: |
+          curl -o Shadowrocket/BardAI.list https://raw.githubusercontent.com/moshall/ios_rule_script/master/rule/Shadowrocket/BardAI/BardAI.list
+          curl -o Shadowrocket/OpenAI.list https://raw.githubusercontent.com/moshall/ios_rule_script/master/rule/Shadowrocket/OpenAI/OpenAI.list
+          curl -o Shadowrocket/Claude.list https://raw.githubusercontent.com/moshall/ios_rule_script/master/rule/Shadowrocket/Claude/Claude.list
+          cat Shadowrocket/BardAI.list Shadowrocket/OpenAI.list Shadowrocket/Claude.list > Shadowrocket/AI_Combined.list
+          rm Shadowrocket/BardAI.list Shadowrocket/OpenAI.list Shadowrocket/Claude.list  # 删除不需要的文件
+
+
+      # 下载文件XPTV.list (直接引用)
+      - name: Download XPTV.list
+        run: curl -o Shadowrocket/XPTV.list https://raw.githubusercontent.com/fangkuia/XPTV/main/X/Loon%26surge%26shadowrocket.list
+
+
+      # 下载文件YouTube.list (直接引用)
+      - name: Download YouTube.list
+        run: curl -o Shadowrocket/YouTube.list https://raw.githubusercontent.com/moshall/ios_rule_script/master/rule/Shadowrocket/YouTube/YouTube.list
+
+      # 提交并推送合并后的文件
+      - name: Commit and Push Combined Files
+        env:
+          GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+        run: |
+          git config --global user.name 'github-actions'
+          git config --global user.email 'github-actions@github.com'
+          git add Shadowrocket/Netflix.list Shadowrocket/AI_Combined.list Shadowrocket/YouTube.list Shadowrocket/XPTV.list
+          git diff-index --quiet HEAD || git commit -m "Update and combine files from remote repositories"
+          git remote set-url origin https://x-access-token:${{ secrets.PERSONAL_ACCESS_TOKEN }}@github.com/moshall/mk_rule.git
+          git push origin HEAD:main
